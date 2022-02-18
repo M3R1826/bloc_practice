@@ -11,7 +11,6 @@ enum RetrieveType {
 class CovidBloc extends Bloc<CovidEvent, CovidState> {
   final ApiRepository _apiRepository = ApiRepository();
   CovidBloc() : super(CovidInitial()) {
-
     /// flutter_bloc 8.0.0以降でmajorRelease
     // on<GetCovidList>((event, emit) async {
     //   emit(CovidLoading());
