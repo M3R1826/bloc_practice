@@ -1,14 +1,23 @@
+import 'package:bloc_arch_test/todo/view/state_controller/state_controller.dart';
+import 'package:bloc_arch_test/todo/view/todo_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'covid/covid_bloc/bloc/covid_bloc.dart';
-import 'covid/page/covid_page.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) => BlocProvider(
-      create: (BuildContext context) => CovidBloc(),
-      child: const MaterialApp(home: CovidPage()));
+  Widget build(BuildContext context) => MultiProvider(
+        child: const MaterialApp(home: TodoPage()),
+        providers: [
+          ChangeNotifierProvider<TodoStateController>(
+              create: (_) => TodoStateController())
+        ],
+      );
 }

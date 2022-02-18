@@ -3,11 +3,6 @@ import 'package:bloc_arch_test/covid/covid_bloc/state/covid_state.dart';
 import 'package:bloc_arch_test/covid/repository/covid_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum RetrieveType {
-  shuffle,
-  init,
-}
-
 class CovidBloc extends Bloc<CovidEvent, CovidState> {
   final ApiRepository _apiRepository = ApiRepository();
   CovidBloc() : super(CovidInitial()) {
@@ -30,6 +25,7 @@ class CovidBloc extends Bloc<CovidEvent, CovidState> {
   /// flutter_bloc 7.0.0までで使用可能
   /// flutter_bloc 8.0.0以降はon(上部のConstructor内メソッド)を使用
   ///
+  @override
   Stream<CovidState> mapEventToState(CovidEvent event) async* {
     yield CovidLoading();
     if (event is GetCovidList) {
