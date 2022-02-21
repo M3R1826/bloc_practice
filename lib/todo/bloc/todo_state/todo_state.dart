@@ -1,4 +1,3 @@
-import 'package:bloc_arch_test/covid/model/covid_model.dart';
 import 'package:bloc_arch_test/todo/model/response_model/response_model.dart';
 import 'package:equatable/equatable.dart';
 

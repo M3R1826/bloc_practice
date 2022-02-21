@@ -1,7 +1,6 @@
 import 'package:bloc_arch_test/todo/bloc/todo_bloc/todo_bloc.dart';
 import 'package:bloc_arch_test/todo/bloc/todo_event/todo_event.dart';
 import 'package:bloc_arch_test/todo/view/state_controller/state_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +10,7 @@ class AddTodoDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("What's Your Todo?"),
+      title: const Text("What's Your Todo?"),
       content: TextFormField(
         onChanged: (v) =>
             Provider.of<TodoStateController>(context, listen: false)
