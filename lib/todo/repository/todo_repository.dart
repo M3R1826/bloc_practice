@@ -4,7 +4,12 @@ import 'package:bloc_arch_test/todo/model/response_model/response_model.dart';
 class TodoRepository {
   final _api = APIClient();
 
-  Future<void> createData(String todo) async => await _api.createData(todo);
+  Future<ResponseModel> createData(String todo) async {
+    await _api.createData(todo);
+    final res = await retrieveData();
+    return res;
+  }
+
   Future<ResponseModel> retrieveData() async {
     final data = await _api.retrieveData();
     return const ResponseModel().copyWith(responseList: data);

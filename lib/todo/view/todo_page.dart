@@ -3,8 +3,10 @@ import 'package:bloc_arch_test/todo/bloc/todo_event/todo_event.dart';
 import 'package:bloc_arch_test/todo/bloc/todo_state/todo_state.dart';
 import 'package:bloc_arch_test/todo/view/compornent/add_todo_dialog.dart';
 import 'package:bloc_arch_test/todo/view/compornent/todo_view.dart';
+import 'package:bloc_arch_test/todo/view/state_controller/state_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'compornent/loader.dart';
 
@@ -34,11 +36,9 @@ class _TodoPageState extends State<TodoPage> {
         title: const Text("TODO's"),
         actions: [
           IconButton(
-              onPressed: () => showDialog(
+              onPressed: () => showDialog<void>(
                   context: context,
-                  builder: (_) => AddTodoDialog(
-                        todoBloc: _todoBloc,
-                      )),
+                  builder: (context) => AddTodoDialog(todoBloc: _todoBloc)),
               icon: const Icon(Icons.add))
         ],
       ),
@@ -47,19 +47,25 @@ class _TodoPageState extends State<TodoPage> {
   }
 
   Widget _buildWidget() {
-    return BlocProvider(
-      create: (_) => _todoBloc,
-      child: BlocListener<TodoBloc, TodoState>(
-        listener: (_, state) {
-          if (state is TodoError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message.toString())));
-          }
-        },
-        child: BlocBuilder<TodoBloc, TodoState>(builder: (_, state) {
-          return _responseWidget(state);
-        }),
-      ),
+    return MultiProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => _todoBloc,
+          child: BlocListener<TodoBloc, TodoState>(
+            listener: (_, state) {
+              if (state is TodoError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(state.message.toString())));
+              }
+            },
+          ),
+        ),
+        ChangeNotifierProvider<TodoStateController>(
+            create: (context) => TodoStateController(context)),
+      ],
+      child: BlocBuilder<TodoBloc, TodoState>(builder: (_, state) {
+        return _responseWidget(state);
+      }),
     );
   }
 
@@ -69,7 +75,10 @@ class _TodoPageState extends State<TodoPage> {
     } else if (state is TodoLoading) {
       return const InitialLoader();
     } else if (state is TodoSuccess) {
-      return TodoView(list: state.todoModel);
+      return TodoView(
+        list: state.todoModel,
+        todoBloc: _todoBloc,
+      );
     } else if (state is TodoError) {
       return Container();
     } else {

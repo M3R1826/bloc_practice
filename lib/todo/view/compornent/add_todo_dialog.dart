@@ -9,23 +9,31 @@ class AddTodoDialog extends StatelessWidget {
   final TodoBloc todoBloc;
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text("What's Your Todo?"),
-      content: TextFormField(
-        onChanged: (v) =>
-            Provider.of<TodoStateController>(context, listen: false)
-                .setTitle(v),
+    return ChangeNotifierProvider<TodoStateController>(
+      create: (context) => TodoStateController(context),
+      child: Consumer(
+        builder: (context, model, _) {
+          return AlertDialog(
+            title: const Text("What's Your Todo?"),
+            content: TextFormField(
+              onChanged: (v) =>
+                  Provider.of<TodoStateController>(context, listen: false)
+                      .setTitle(v),
+            ),
+            actions: [
+              Consumer<TodoStateController>(builder: (context, model, _) {
+                return ElevatedButton(
+                    onPressed: () async {
+                      await context.read<TodoStateController>().createTodo();
+                      todoBloc.add(GetTodoList());
+                      Navigator.pop(context);
+                    },
+                    child: const Text('追加する'));
+              }),
+            ],
+          );
+        },
       ),
-      actions: [
-        ElevatedButton(
-            onPressed: () async {
-              await Provider.of<TodoStateController>(context, listen: false)
-                  .createTodo();
-              todoBloc.add(GetTodoList());
-              Navigator.pop(context);
-            },
-            child: const Text('追加する'))
-      ],
     );
   }
 }

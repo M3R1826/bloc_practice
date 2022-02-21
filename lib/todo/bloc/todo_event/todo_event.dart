@@ -7,7 +7,10 @@ abstract class TodoEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class CreateTodoList extends TodoEvent {}
+class CreateTodoList extends TodoEvent {
+  const CreateTodoList(this.title);
+  final String title;
+}
 
 class GetTodoList extends TodoEvent {}
 

@@ -35,6 +35,13 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       } catch (e) {
         yield const TodoError("Failed to fetch data. is your device online?");
       }
+    } else if (event is CreateTodoList) {
+      try {
+        final data = await _repository.createData(event.title);
+        yield TodoSuccess(data);
+      } catch (e) {
+        yield const TodoError("Failed to fetch data. is your device online?");
+      }
     }
   }
 }
