@@ -39,7 +39,7 @@ class _TodoPageState extends State<TodoPage> {
                   builder: (_) => AddTodoDialog(
                         todoBloc: _todoBloc,
                       )),
-              icon: Icon(Icons.add))
+              icon: const Icon(Icons.add))
         ],
       ),
       body: _buildWidget(),
