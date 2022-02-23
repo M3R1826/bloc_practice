@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
+import 'bnb/bnb_bloc/bnb_bloc.dart';
+import 'bnb/view/bnb.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -19,8 +22,9 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<TodoStateController>(
               create: (context) => TodoStateController(context)),
-          BlocProvider<TodoBloc>(create: (_) => TodoBloc())
+          BlocProvider<TodoBloc>(create: (_) => TodoBloc()),
+          BlocProvider<BNBBloc>(create: (_) => BNBBloc()),
         ],
-        child: const MaterialApp(home: TodoPage()),
+        child: const MaterialApp(home: BNBPage()),
       );
 }
